@@ -50,7 +50,7 @@ public class WaveformBuffer {
         this.writeLock = readWriteLock.writeLock();
     }
 
-    private void log(long time, int rawValue, float filteredV, float ratio, float mediumRatio, float specialRatio, boolean expand) {
+    void log(long time, int rawValue, float filteredV, float ratio, float mediumRatio, float specialRatio, boolean expand) {
         if (time <= lastLog) {
             return;
         }

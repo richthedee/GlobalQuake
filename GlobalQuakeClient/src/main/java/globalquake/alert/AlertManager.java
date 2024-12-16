@@ -40,8 +40,10 @@ public class AlertManager {
     }
 
     public synchronized void tick() {
-        GlobalQuake.instance.getEarthquakeAnalysis().getEarthquakes().forEach(earthquake -> warnings.putIfAbsent(earthquake, new Warning(GlobalQuake.instance.currentTimeMillis())));
-
+        GlobalQuake.instance.getEarthquakeAnalysis().getEarthquakes().forEach(earthquake -> {
+            warnings.putIfAbsent(earthquake, new Warning(GlobalQuake.instance.currentTimeMillis()));
+            EventExport.exportEarthquakeEvent(earthquake); //exporting the event to csv file, can be updated to be optional depending on the config
+        });
         for (Iterator<Map.Entry<Warnable, Warning>> iterator = warnings.entrySet().iterator(); iterator.hasNext(); ) {
             var kv = iterator.next();
             Warnable warnable = kv.getKey();

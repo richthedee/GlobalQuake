@@ -143,19 +143,35 @@ public interface GeoUtils {
         return bearing;
     }
 
-    static double geologicalDistance(double lat1, double lon1, double alt1, double lat2, double lon2,
-                                     double alt2) {
-        alt1 += EARTH_RADIUS;
-        alt2 += EARTH_RADIUS;
-        double x1 = FastMath.sin(Math.toRadians(lon1)) * alt1 * FastMath.cos(Math.toRadians(lat1));
-        double z1 = -Math.cos(Math.toRadians(lon1)) * alt1 * FastMath.cos(Math.toRadians(lat1));
-        double y1 = FastMath.sin(Math.toRadians(lat1)) * alt1;
+	static double geologicalDistance(double lat1, double lon1, double alt1, double lat2, double lon2, double alt2) {
+		alt1 += EARTH_RADIUS;
+		alt2 += EARTH_RADIUS;
 
-        double x2 = FastMath.sin(Math.toRadians(lon2)) * alt2 * FastMath.cos(Math.toRadians(lat2));
-        double z2 = -FastMath.cos(Math.toRadians(lon2)) * alt2 * FastMath.cos(Math.toRadians(lat2));
-        double y2 = FastMath.sin(Math.toRadians(lat2)) * alt2;
-        return FastMath.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) + (z1 - z2) * (z1 - z2));
-    }
+		double lat1Rad = Math.toRadians(lat1);
+		double lon1Rad = Math.toRadians(lon1);
+		double lat2Rad = Math.toRadians(lat2);
+		double lon2Rad = Math.toRadians(lon2);
+
+		double sinLat1 = FastMath.sin(lat1Rad);
+		double cosLat1 = FastMath.cos(lat1Rad);
+		double sinLon1 = FastMath.sin(lon1Rad);
+		double cosLon1 = FastMath.cos(lon1Rad);
+
+		double sinLat2 = FastMath.sin(lat2Rad);
+		double cosLat2 = FastMath.cos(lat2Rad);
+		double sinLon2 = FastMath.sin(lon2Rad);
+		double cosLon2 = FastMath.cos(lon2Rad);
+
+		double x1 = sinLon1 * alt1 * cosLat1;
+		double z1 = -cosLon1 * alt1 * cosLat1;
+		double y1 = sinLat1 * alt1;
+
+		double x2 = sinLon2 * alt2 * cosLat2;
+		double z2 = -cosLon2 * alt2 * cosLat2;
+		double y2 = sinLat2 * alt2;
+
+		return FastMath.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) + (z1 - z2) * (z1 - z2));
+	}
 
     static double getMaxPGA(double lat, double lon, double depth, double mag) {
         double distGEO = globalquake.core.regions.Regions.getOceanDistance(lat, lon, false, depth);
